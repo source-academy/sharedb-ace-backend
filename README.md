@@ -20,4 +20,4 @@ $ yarn
 ```
 $ yarn start
 ```
-5. Open `http://localhost:4000/` in your browser.
+5. Open `http://localhost:8080/` in your browser.

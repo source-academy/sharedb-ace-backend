@@ -2,7 +2,7 @@
 
 import server from '../server';
 
-const PORT = 4000;
+const PORT = 8080;
 
 server.listen(PORT);
 console.log(`listening on port ${PORT}`);
