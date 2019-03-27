@@ -19,6 +19,8 @@ const app = websockify(new Koa(), {
   onConnection: (socket) => {
     const stream = new WebSocketJSONStream(socket);
     share.listen(stream);
+    socket.ping('', false, true);
+    socket.on('pong', () => console.log('hello'));
   },
 });
 
