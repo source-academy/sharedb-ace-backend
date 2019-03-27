@@ -59,4 +59,8 @@ router.get('/gists/:sid', async (ctx) => {
   ctx.body = {id: ctx.params.sid, state: flag};
 });
 
+router.get('/ping', async (ctx) => {
+  ctx.status = 200;
+});
+
 export default router;
