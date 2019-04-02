@@ -20,8 +20,9 @@ async function newGist() {
       resolve();
     });
   });
-  console.log("In newGist(), count = " + count);
+  console.log("=================================");
   console.log(`New session created with uuid: ${id}`);
+  console.log("In newGist(), count = " + count);
   console.log("lastest: " + latest);
   return id;
 }
@@ -32,25 +33,30 @@ newGist();
 // Gists
 router.post('/gists/new', async (ctx) => {
   const id = await newGist();
+  console.log("=================================");
+  console.log("New session...");
   console.log("In gists/new, count = " + count);
   ctx.body = {id};
-  console.log("ctx.body.id: " + ctx.body.id);
 });
 
 router.get('/gists/latest', async (ctx) => {
   newGist();
+  console.log("=================================");
+  console.log("Obtaining latest created session...");
   console.log("In gists/latest, count = " + count);
   console.log("lastest: " + latest);
   ctx.body = {id: latest};
-  console.log("ctx.body.id: " + ctx.body.id);
 });
 
 router.get('/gists/:sid', async (ctx) => {
+  const id = ctx.params.sid;
+  const flag = list_id.indexOf(id) == -1 ? false : true;
+  console.log("=================================");
+  console.log(`Accessing session with uuid: ${ctx.params.sid}`);
   console.log("In gists/:sid, count = " + count);
   console.log("lastest: " + latest);
-  console.log(`Accessing session with uuid: ${ctx.params.sid}`);
-  ctx.body = {id: ctx.params.sid};
-  console.log("ctx.body.id: " + ctx.body.id);
+  console.log("Session fould: " + flag);
+  ctx.body = {id: ctx.params.sid, state: flag};
 });
 
 export default router;
