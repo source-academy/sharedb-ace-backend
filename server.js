@@ -18,7 +18,9 @@ import share from './db';
 const app = websockify(new Koa(), {
   onConnection: (socket) => {
     const stream = new WebSocketJSONStream(socket);
-    share.listen(stream);\
+    share.listen(stream);
+    const ping = () => socket.send('{"a":"heartbeat"}');
+    setInterval(ping, 5000);
   },
 });
 
