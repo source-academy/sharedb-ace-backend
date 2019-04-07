@@ -8,7 +8,7 @@ import convert from 'koa-convert';
 import session from 'koa-session';
 import serve from 'koa-static';
 // import session from 'koa-session';
-import WebSocketJSONStream from 'websocket-json-stream';
+import WebSocketJSONStream from '@teamwork/websocket-json-stream';
 // import websocketRoutes from './router/websocket';
 import * as routes from './router/';
 
@@ -18,8 +18,14 @@ import share from './db';
 const app = websockify(new Koa(), {
   onConnection: (socket) => {
     const stream = new WebSocketJSONStream(socket);
+    stream.on('error', err => {
+      if(err.name === "Error [ERR_CLOSED]") {
+        // do nothing
+        return;
+      }
+    });
     share.listen(stream);
-    const ping = () => socket.send('{"a":"heartbeat"}');
+    const ping = () => socket.send('{"a":"heartbeat"}', err => {});
     setInterval(ping, 5000);
   },
 });
