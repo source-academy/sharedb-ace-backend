@@ -1,10 +1,11 @@
 import Router from 'koa-router';
 import share from '../db';
 import uuid from 'uuid/v1';
+import HashSet from './hashset.js';
 
 const router = new Router();
 let latest = null;
-let list_id = [];
+let list_id = new HashSet();
 let count = 0;
 
 async function newGist() {
@@ -16,7 +17,8 @@ async function newGist() {
     }, function(err) {
       if (err) reject(err);
       latest = id;
-      list_id[count++] = id;
+      count++;
+      list_id.put(id);
       resolve();
     });
   });
@@ -50,7 +52,7 @@ router.get('/gists/latest', async (ctx) => {
 
 router.get('/gists/:sid', async (ctx) => {
   const id = ctx.params.sid;
-  const flag = list_id.indexOf(id) == -1 ? false : true;
+  const flag = list_id.contains(id);
   console.log("=================================");
   console.log(`Accessing session with uuid: ${ctx.params.sid}`);
   console.log("In gists/:sid, count = " + count);
