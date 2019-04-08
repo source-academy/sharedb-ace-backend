@@ -8,7 +8,7 @@ import convert from 'koa-convert';
 import session from 'koa-session';
 import serve from 'koa-static';
 // import session from 'koa-session';
-import WebSocketJSONStream from '@teamwork/websocket-json-stream';
+import WebSocketJSONStream from 'websocket-json-stream';
 // import websocketRoutes from './router/websocket';
 import * as routes from './router/';
 
