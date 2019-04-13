@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "main": "bin/run",
   "dependencies": {
+    "@teamwork/websocket-json-stream": "^2.0.0",
     "babel-preset-es2015": "^6.13.2",
     "babel-preset-stage-2": "^6.13.0",
     "eslint-plugin-import": "^1.13.0",
@@ -16,11 +17,10 @@
     "koa-router": "^7.0.1",
     "koa-session": "^3.3.1",
     "koa-static": "^3.0.0",
-    "koa-websocket": "git+https://github.com/jethrokuan/koa-websocket#next", 
+    "koa-websocket": "git+https://github.com/jethrokuan/koa-websocket.git#next",
     "sharedb": "^1.0.0-beta.7",
     "sharedb-redis-pubsub": "^1.0.0-beta.1",
-    "uuid": "^3.0.1",
-    "websocket-json-stream": "^0.0.3"
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
@@ -32,5 +32,16 @@
   "scripts": {
     "dev": "nodemon --exec babel-node ./bin/run",
     "start": "babel-node ./bin/run"
-  }
+  },
+  "description": "<strong>sharedb-ace-backend</strong> is the web server to support collaborative editing in <a href = \"https://github.com/source-academy/cadet-frontend\">Source Academy</a>.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jiayushe/sharedb-ace-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jiayushe/sharedb-ace-backend/issues"
+  },
+  "homepage": "https://github.com/jiayushe/sharedb-ace-backend#readme"
 }
