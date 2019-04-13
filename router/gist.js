@@ -29,6 +29,14 @@ async function newGist() {
   return id;
 }
 
+// Statistics
+router.get('/stats', async (ctx) => {
+  console.log("=================================");
+  console.log("Obtaining stats...");
+  console.log("In gists/stats, count = " + count);
+  ctx.body = {count: count};
+});
+
 // For testing only
 newGist();
 
