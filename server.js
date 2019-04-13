@@ -25,8 +25,8 @@ const app = websockify(new Koa(), {
       }
     });
     share.listen(stream);
-    const ping = () => socket.send('{"a":"heartbeat"}', err => {});
-    setInterval(ping, 5000);
+    // const ping = () => socket.send('{"a":"heartbeat"}', err => {});
+    // setInterval(ping, 5000);
   },
 });
 
