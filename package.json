@@ -25,13 +25,14 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint": "^6.0.1",
+    "eslint-config-google": "^0.13.0",
     "nodemon": "^1.19.1"
   },
   "scripts": {
     "dev": "nodemon --exec babel-node ./bin/run",
-    "start": "babel-node ./bin/run"
+    "start": "babel-node ./bin/run",
+    "lint": "eslint ."
   },
   "description": "<strong>sharedb-ace-backend</strong> is the web server to support collaborative editing in <a href = \"https://github.com/source-academy/cadet-frontend\">Source Academy</a>.",
   "repository": {
