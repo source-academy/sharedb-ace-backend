@@ -18,8 +18,8 @@ import share from './db';
 const app = websockify(new Koa(), {
   onConnection: (socket) => {
     const stream = new WebSocketJSONStream(socket);
-    stream.on('error', err => {
-      if(err.name === "Error [ERR_CLOSED]") {
+    stream.on('error', (err) => {
+      if (err.name === 'Error [ERR_CLOSED]') {
         // do nothing
         return;
       }
@@ -32,7 +32,7 @@ const app = websockify(new Koa(), {
 
 app.keys = ['some secret hurr'];
 app.use(cors());
-app.use(json({ pretty: false, param: 'pretty' }));
+app.use(json({pretty: false, param: 'pretty'}));
 app.use(logger());
 app.use(bodyParser());
 app.use(convert(session(app)));
