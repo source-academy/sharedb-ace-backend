@@ -6,3 +6,5 @@ const PORT = 8080;
 
 server.listen(PORT);
 console.log(`listening on port ${PORT}`);
+
+process.exit(0);

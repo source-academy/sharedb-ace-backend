@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - 10
+branches:
+  except:
+    - /^no-ci.*$/
+before_install:
+  - export TZ=Asia/Singapore
+script:
+  - yarn
+  - yarn test
+  - yarn lint

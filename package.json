@@ -31,8 +31,9 @@
   },
   "scripts": {
     "dev": "nodemon --exec babel-node ./bin/run",
+    "lint": "eslint .",
     "start": "babel-node ./bin/run",
-    "lint": "eslint ."
+    "test": "babel-node ./bin/testrun"
   },
   "description": "<strong>sharedb-ace-backend</strong> is the web server to support collaborative editing in <a href = \"https://github.com/source-academy/cadet-frontend\">Source Academy</a>.",
   "repository": {
