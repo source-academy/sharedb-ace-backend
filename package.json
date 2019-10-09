@@ -35,13 +35,13 @@
     "start": "babel-node ./bin/run",
     "test": "babel-node ./bin/testrun"
   },
-  "description": "<strong>sharedb-ace-backend</strong> is the web server to support collaborative editing in <a href = \"https://github.com/source-academy/cadet-frontend\">Source Academy</a>.",
+  "description": "sharedb-ace-backend is the web server to support collaborative editing in Source Academy.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jiayushe/sharedb-ace-backend.git"
+    "url": "git+https://github.com/source-academy/sharedb-ace-backend.git"
   },
   "bugs": {
-    "url": "https://github.com/jiayushe/sharedb-ace-backend/issues"
+    "url": "https://github.com/source-academy/sharedb-ace-backend/issues"
   },
-  "homepage": "https://github.com/jiayushe/sharedb-ace-backend#readme"
+  "homepage": "https://github.com/source-academy/sharedb-ace-backend#readme"
 }
