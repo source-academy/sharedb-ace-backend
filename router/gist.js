@@ -41,7 +41,7 @@ router.get('/stats', async (ctx) => {
 });
 
 // For testing only
-newGist();
+// newGist();
 
 // Gists
 router.post('/gists/new', async (ctx) => {
