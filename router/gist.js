@@ -3,7 +3,6 @@ import share from '../db';
 import {v1 as uuid} from 'uuid';
 
 const router = new Router();
-let latest = null;
 const listId = new Set();
 
 /**
@@ -17,7 +16,6 @@ async function newGist() {
       'code': '// Type your program in here!',
     }, function(err) {
       if (err) reject(err);
-      latest = id;
       listId.add(id);
       resolve();
     });
@@ -37,25 +35,12 @@ router.get('/stats', async (ctx) => {
   ctx.body = {count: listId.size};
 });
 
-// For testing only
-// newGist();
-
-// Gists
-router.post('/gists/new', async (ctx) => {
+router.get('/gists/latest', async (ctx) => {
   const id = await newGist();
   /* console.log('=================================');
-  console.log('New session...');
-  console.log('In gists/new, count = ' + count); */
-  ctx.body = {id};
-});
-
-router.get('/gists/latest', async (ctx) => {
-  newGist();
-  /* console.log('=================================');
   console.log('Obtaining latest created session...');
-  console.log('In gists/latest, count = ' + count);
-  console.log('lastest: ' + latest); */
-  ctx.body = {id: latest};
+  console.log('In gists/latest, count = ' + count); */
+  ctx.body = {id: id};
 });
 
 router.get('/gists/:sid', async (ctx) => {

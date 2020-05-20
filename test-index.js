@@ -1,5 +1,3 @@
-#!/usr/local/bin/babel-node
-
 import server from './server';
 
 const PORT = 8080;
