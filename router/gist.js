@@ -1,7 +1,6 @@
 import Router from 'koa-router';
 import share from '../db';
-import { v1 as uuid } from 'uuid';
-import HashSet from './hashset.js';
+import {v1 as uuid} from 'uuid';
 
 const router = new Router();
 let latest = null;
