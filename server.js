@@ -6,8 +6,6 @@ import logger from 'koa-logger';
 import bodyParser from 'koa-bodyparser';
 import convert from 'koa-convert';
 import session from 'koa-session';
-import serve from 'koa-static';
-// import session from 'koa-session';
 import WebSocketJSONStream from '@teamwork/websocket-json-stream';
 // import websocketRoutes from './router/websocket';
 import * as routes from './router/';
@@ -36,7 +34,6 @@ app.use(json({pretty: false, param: 'pretty'}));
 app.use(logger());
 app.use(bodyParser());
 app.use(convert(session(app)));
-app.use(serve(__dirname + '/public'));
 
 // Routes setup
 Object.values(routes).forEach((route) => {
