@@ -31,7 +31,7 @@
   "scripts": {
     "build": "babel --ignore node_modules -d dist .",
     "dev": "yarn run build && nodemon dist/index.js",
-    "lint": "eslint .",
+    "lint": "eslint --ignore-pattern dist .",
     "start": "yarn run build && node dist/index.js",
     "test": "yarn run build && node dist/test-index.js"
   },
