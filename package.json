@@ -1,0 +1,25 @@
+{
+  "name": "sharedb-ace-backend",
+  "version": "0.0.1",
+  "description": "ShareDB-powered backend for collaborative editing in the Source Academy.",
+  "main": "index.js",
+  "repository": "https://github.com/source-academy/sharedb-ace-backend",
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "eslint": "eslint index.js",
+    "format": "eslint --fix index.js && prettier index.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@teamwork/websocket-json-stream": "^2.0.0",
+    "koa": "^2.13.0",
+    "koa-easy-ws": "^1.2.0",
+    "sharedb": "^1.4.1",
+    "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.6.0",
+    "prettier": "2.0.5"
+  }
+}
