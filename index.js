@@ -62,15 +62,14 @@ app.use(async (ctx) => {
     return;
   }
 
-  if (!ctx.ws) {
-    ctx.status = 426;
+  if (ctx.ws) {
+    const ws = new WebSocketJSONStream(await ctx.ws());
+    db.listen(ws, docId);
+  } else {
+    ctx.body = 'Document exists.';
     ctx.set('Upgrade', 'WebSocket');
     ctx.set('Connection', 'Upgrade');
-    return;
   }
-
-  const ws = new WebSocketJSONStream(await ctx.ws());
-  db.listen(ws, docId);
 });
 
 app.listen(8080);
