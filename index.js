@@ -1,5 +1,6 @@
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
+const cors = require('@koa/cors');
 const websocket = require('koa-easy-ws');
 const WebSocketJSONStream = require('@teamwork/websocket-json-stream');
 const ShareDB = require('sharedb');
@@ -28,6 +29,7 @@ db.use('readSnapshots', (ctx, done) => {
 
 const documents = new Set();
 
+app.use(cors());
 app.use(websocket());
 app.use(bodyParser({ enableTypes: ['json', 'text'], strict: false }));
 app.use(async (ctx) => {
