@@ -72,7 +72,7 @@ app.use(async (ctx) => {
   }
 });
 
-app.listen(8080);
+app.listen(process.env.PORT || 8080);
 
 function isEmptyObject(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
