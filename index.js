@@ -36,7 +36,7 @@ app.use(async (ctx) => {
   if (ctx.method === 'POST' && ctx.path === '/') {
     const contents = isEmptyObject(ctx.request.body) ? '' : ctx.request.body;
     const docId = uuid();
-    const doc = db.connect().get(COLLECTION_NAME, docId);
+    const doc = db.connect(undefined, docId).get(COLLECTION_NAME, docId);
     await new Promise((resolve, reject) => {
       doc.create(contents, (err) => {
         if (err) {
