@@ -1,11 +1,11 @@
 const Koa = require('koa');
+const bodyParser = require('koa-bodyparser');
 const websocket = require('koa-easy-ws');
 const WebSocketJSONStream = require('@teamwork/websocket-json-stream');
 const ShareDB = require('sharedb');
 const uuid = require('uuid').v4;
 
 const COLLECTION_NAME = 'sa';
-const INITIAL_CONTENTS = '// Type your program in here!';
 
 const app = new Koa();
 const db = new ShareDB();
@@ -29,12 +29,14 @@ db.use('readSnapshots', (ctx, done) => {
 const documents = new Set();
 
 app.use(websocket());
+app.use(bodyParser({ enableTypes: ['json', 'text'], strict: false }));
 app.use(async (ctx) => {
   if (ctx.method === 'POST' && ctx.path === '/') {
+    const contents = isEmptyObject(ctx.request.body) ? '' : ctx.request.body;
     const docId = uuid();
     const doc = db.connect().get(COLLECTION_NAME, docId);
     await new Promise((resolve, reject) => {
-      doc.create(INITIAL_CONTENTS, (err) => {
+      doc.create(contents, (err) => {
         if (err) {
           reject(err);
         } else {
@@ -70,3 +72,7 @@ app.use(async (ctx) => {
 });
 
 app.listen(8080);
+
+function isEmptyObject(obj) {
+  return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
