@@ -67,8 +67,6 @@ app.use(async (ctx) => {
     db.listen(ws, docId);
   } else {
     ctx.body = 'Document exists.';
-    ctx.set('Upgrade', 'WebSocket');
-    ctx.set('Connection', 'Upgrade');
   }
 });
 
