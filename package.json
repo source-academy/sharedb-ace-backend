@@ -12,7 +12,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@koa/cors": "^3.1.0",
+    "@koa/cors": "^5.0.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
