@@ -4,7 +4,6 @@ const cors = require('@koa/cors');
 const websocket = require('koa-easy-ws');
 const WebSocketJSONStream = require('@teamwork/websocket-json-stream');
 const ShareDB = require('sharedb');
-const { Connection } = require('sharedb/lib/client');
 const uuid = require('uuid').v4;
 
 const COLLECTION_NAME = 'sa';
