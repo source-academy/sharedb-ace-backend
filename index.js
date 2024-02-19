@@ -59,6 +59,9 @@ app.use(async (ctx) => {
       [sessionViewingId, true]
     ]);
     documents.add(sessionDetails);
+
+    console.log(documents);
+
     ctx.body = {docId, sessionEditingId, sessionViewingId};
     return;
   }
@@ -70,15 +73,13 @@ app.use(async (ctx) => {
     ctx.status = 404;
     return;
   }
-  // if (!documents.has(docId)) {
-  //   ctx.status = 404;
-  //   return;
-  // }
 
   if (ctx.method !== 'GET') {
     ctx.status = 405;
     return;
   }
+
+  console.log(ctx.ws);
 
   if (ctx.ws) {
     const ws = new WebSocketJSONStream(await ctx.ws());
@@ -99,8 +100,7 @@ function getSessionDetails(sessionId) {
     if (session.has(sessionId)) {
       console.log(session);
       return [session.get("docId"), session.get(sessionId)];
-    } else {
-      return [null, null];
     }
   }
+  return [null, null];
 }
