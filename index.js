@@ -4,6 +4,7 @@ const cors = require('@koa/cors');
 const websocket = require('koa-easy-ws');
 const WebSocketJSONStream = require('@teamwork/websocket-json-stream');
 const ShareDB = require('sharedb');
+const { Connection } = require('sharedb/lib/client');
 const uuid = require('uuid').v4;
 
 const COLLECTION_NAME = 'sa';
@@ -34,11 +35,17 @@ app.use(websocket());
 app.use(bodyParser({ enableTypes: ['json', 'text'], strict: false }));
 app.use(async (ctx) => {
   if (ctx.method === 'POST' && ctx.path === '/') {
-    const contents = isEmptyObject(ctx.request.body) ? '' : ctx.request.body;
+    const {contents} = ctx.request.body;    
+
+    //creates various id 
     const docId = uuid();
-    const doc = db.connect(undefined, docId).get(COLLECTION_NAME, docId);
+    const sessionEditingId = uuid();
+    const sessionViewingId = uuid();
+
+    const connection = db.connect(undefined, docId);
+    const doc = connection.get(COLLECTION_NAME, docId);
     await new Promise((resolve, reject) => {
-      doc.create(contents, (err) => {
+      doc.create({contents}, (err) => {
         if (err) {
           reject(err);
         } else {
@@ -46,16 +53,28 @@ app.use(async (ctx) => {
         }
       });
     });
-    documents.add(docId);
-    ctx.body = docId;
+
+    const sessionDetails = new Map([
+      ["docId", docId], 
+      [sessionEditingId, false], 
+      [sessionViewingId, true]
+    ]);
+    documents.add(sessionDetails);
+    ctx.body = {docId, sessionEditingId, sessionViewingId};
     return;
   }
 
-  const docId = ctx.path.substr(1);
-  if (!documents.has(docId)) {
+  const sessionId = ctx.path.substr(1);
+  const [docId, readOnly] = getSessionDetails(sessionId);
+
+  if (docId === null) {
     ctx.status = 404;
     return;
   }
+  // if (!documents.has(docId)) {
+  //   ctx.status = 404;
+  //   return;
+  // }
 
   if (ctx.method !== 'GET') {
     ctx.status = 405;
@@ -64,9 +83,9 @@ app.use(async (ctx) => {
 
   if (ctx.ws) {
     const ws = new WebSocketJSONStream(await ctx.ws());
-    db.listen(ws, docId);
+    db.listen(ws, docId); // docId is passed to 'connect' middleware as ctx.req
   } else {
-    ctx.body = 'Document exists.';
+    ctx.body = {docId, readOnly};
   }
 });
 
@@ -74,4 +93,15 @@ app.listen(process.env.PORT || 8080);
 
 function isEmptyObject(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
+function getSessionDetails(sessionId) {
+  for (let session of documents) {
+    if (session.has(sessionId)) {
+      console.log(session);
+      return [session.get("docId"), session.get(sessionId)];
+    } else {
+      return [null, null];
+    }
+  }
 }
