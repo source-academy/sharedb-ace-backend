@@ -38,8 +38,8 @@ app.use(async (ctx) => {
 
     //creates various id 
     const docId = uuid();
-    const sessionEditingId = uuid();
-    const sessionViewingId = uuid();
+    const sessionEditingId = uuid().slice(0,6);
+    const sessionViewingId = uuid().slice(0,6);
 
     const connection = db.connect(undefined, docId);
     const doc = connection.get(COLLECTION_NAME, docId);
@@ -78,9 +78,7 @@ app.use(async (ctx) => {
     ctx.status = 405;
     return;
   }
-
-  console.log(ctx.ws);
-
+  
   if (ctx.ws) {
     const ws = new WebSocketJSONStream(await ctx.ws());
     db.listen(ws, docId); // docId is passed to 'connect' middleware as ctx.req
@@ -90,10 +88,6 @@ app.use(async (ctx) => {
 });
 
 app.listen(process.env.PORT || 8080);
-
-function isEmptyObject(obj) {
-  return Object.keys(obj).length === 0 && obj.constructor === Object;
-}
 
 function getSessionDetails(sessionId) {
   for (let session of documents) {
