@@ -12,18 +12,20 @@ const app = new Koa();
 const db = new ShareDB();
 
 db.use('connect', (ctx, done) => {
-  // use custom to store the allowed document ID
+  // use custom to store the allowed document ID and readOnly setting
   ctx.agent.custom = ctx.req;
   done();
 });
 db.use('submit', (ctx, done) => {
-  const allowed = ctx.collection === COLLECTION_NAME && ctx.id === ctx.agent.custom;
+  const allowed = ctx.collection === COLLECTION_NAME && 
+                  ctx.id === ctx.agent.custom.docId && 
+                  !ctx.agent.custom.readOnly;
   done(allowed ? undefined : 'Cannot write to this document');
 });
 db.use('readSnapshots', (ctx, done) => {
   const allowed =
     ctx.collection === COLLECTION_NAME &&
-    !ctx.snapshots.find((snapshot) => snapshot.id !== ctx.agent.custom);
+    !ctx.snapshots.find((snapshot) => snapshot.id !== ctx.agent.custom.docId);
   done(allowed ? undefined : 'Cannot read these document(s)');
 });
 
@@ -41,7 +43,7 @@ app.use(async (ctx) => {
     const sessionEditingId = uuid().slice(0,6);
     const sessionViewingId = uuid().slice(0,6);
 
-    const connection = db.connect(undefined, docId);
+    const connection = db.connect(undefined, {docId, readOnly: false});
     const doc = connection.get(COLLECTION_NAME, docId);
     await new Promise((resolve, reject) => {
       doc.create({contents}, (err) => {
@@ -59,9 +61,6 @@ app.use(async (ctx) => {
       [sessionViewingId, true]
     ]);
     documents.add(sessionDetails);
-
-    console.log(documents);
-
     ctx.body = {docId, sessionEditingId, sessionViewingId};
     return;
   }
@@ -81,7 +80,7 @@ app.use(async (ctx) => {
   
   if (ctx.ws) {
     const ws = new WebSocketJSONStream(await ctx.ws());
-    db.listen(ws, docId); // docId is passed to 'connect' middleware as ctx.req
+    db.listen(ws, {docId, readOnly}); // docId and readOnly is passed to 'connect' middleware as ctx.req
   } else {
     ctx.body = {docId, readOnly};
   }
@@ -90,9 +89,8 @@ app.use(async (ctx) => {
 app.listen(process.env.PORT || 8080);
 
 function getSessionDetails(sessionId) {
-  for (let session of documents) {
+  for (const session of documents) {
     if (session.has(sessionId)) {
-      console.log(session);
       return [session.get("docId"), session.get(sessionId)];
     }
   }
