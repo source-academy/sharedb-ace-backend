@@ -29,7 +29,7 @@ db.use('readSnapshots', (ctx, done) => {
   done(allowed ? undefined : 'Cannot read these document(s)');
 });
 
-const documents = new Set();
+const documents = new Map();
 
 app.use(cors());
 app.use(websocket());
@@ -40,8 +40,10 @@ app.use(async (ctx) => {
 
     //creates various id 
     const docId = uuid();
-    const sessionEditingId = uuid().slice(0,6);
-    const sessionViewingId = uuid().slice(0,6);
+    const sessionEditingId = generateShortId();
+    documents.set(sessionEditingId, [docId, false]);
+    const sessionViewingId = generateShortId();
+    documents.set(sessionViewingId, [docId, true]);
 
     const connection = db.connect(undefined, {docId, readOnly: false});
     const doc = connection.get(COLLECTION_NAME, docId);
@@ -54,13 +56,6 @@ app.use(async (ctx) => {
         }
       });
     });
-
-    const sessionDetails = new Map([
-      ["docId", docId], 
-      [sessionEditingId, false], 
-      [sessionViewingId, true]
-    ]);
-    documents.add(sessionDetails);
     ctx.body = {docId, sessionEditingId, sessionViewingId};
     return;
   }
@@ -77,7 +72,6 @@ app.use(async (ctx) => {
     ctx.status = 405;
     return;
   }
-  
   if (ctx.ws) {
     const ws = new WebSocketJSONStream(await ctx.ws());
     db.listen(ws, {docId, readOnly}); // docId and readOnly is passed to 'connect' middleware as ctx.req
@@ -89,10 +83,15 @@ app.use(async (ctx) => {
 app.listen(process.env.PORT || 8080);
 
 function getSessionDetails(sessionId) {
-  for (const session of documents) {
-    if (session.has(sessionId)) {
-      return [session.get("docId"), session.get(sessionId)];
-    }
+  const sessionDetails = documents.get(sessionId);
+  return sessionDetails === undefined ? [null, null] : sessionDetails;
+}
+
+function generateShortId() {
+  const id = uuid().slice(0,6);
+  if (documents.has(id)) {
+    return generateShortId();
+  } else {
+    return id;
   }
-  return [null, null];
 }
