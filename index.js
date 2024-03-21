@@ -17,9 +17,10 @@ db.use('connect', (ctx, done) => {
   done();
 });
 db.use('submit', (ctx, done) => {
-  const allowed = ctx.collection === COLLECTION_NAME && 
-                  ctx.id === ctx.agent.custom.docId && 
-                  !ctx.agent.custom.readOnly;
+  const allowed =
+    ctx.collection === COLLECTION_NAME &&
+    ctx.id === ctx.agent.custom.docId &&
+    !ctx.agent.custom.readOnly;
   done(allowed ? undefined : 'Cannot write to this document');
 });
 db.use('readSnapshots', (ctx, done) => {
@@ -36,19 +37,19 @@ app.use(websocket());
 app.use(bodyParser({ enableTypes: ['json', 'text'], strict: false }));
 app.use(async (ctx) => {
   if (ctx.method === 'POST' && ctx.path === '/') {
-    const {contents} = ctx.request.body;    
+    const { contents } = ctx.request.body;
 
-    //creates various id 
+    // Creates various IDs
     const docId = uuid();
     const sessionEditingId = generateShortId();
     documents.set(sessionEditingId, [docId, false]);
     const sessionViewingId = generateShortId();
     documents.set(sessionViewingId, [docId, true]);
 
-    const connection = db.connect(undefined, {docId, readOnly: false});
+    const connection = db.connect(undefined, { docId, readOnly: false });
     const doc = connection.get(COLLECTION_NAME, docId);
     await new Promise((resolve, reject) => {
-      doc.create({contents}, (err) => {
+      doc.create({ contents }, (err) => {
         if (err) {
           reject(err);
         } else {
@@ -56,7 +57,7 @@ app.use(async (ctx) => {
         }
       });
     });
-    ctx.body = {docId, sessionEditingId, sessionViewingId};
+    ctx.body = { docId, sessionEditingId, sessionViewingId };
     return;
   }
 
@@ -74,9 +75,9 @@ app.use(async (ctx) => {
   }
   if (ctx.ws) {
     const ws = new WebSocketJSONStream(await ctx.ws());
-    db.listen(ws, {docId, readOnly}); // docId and readOnly is passed to 'connect' middleware as ctx.req
+    db.listen(ws, { docId, readOnly }); // docId and readOnly is passed to 'connect' middleware as ctx.req
   } else {
-    ctx.body = {docId, readOnly};
+    ctx.body = { docId, readOnly };
   }
 });
 
@@ -88,7 +89,7 @@ function getSessionDetails(sessionId) {
 }
 
 function generateShortId() {
-  const id = uuid().slice(0,6);
+  const id = uuid().slice(0, 6);
   if (documents.has(id)) {
     return generateShortId();
   } else {
