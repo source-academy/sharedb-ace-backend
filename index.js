@@ -73,6 +73,7 @@ app.use(async (ctx) => {
     ctx.status = 405;
     return;
   }
+
   if (ctx.ws) {
     const ws = new WebSocketJSONStream(await ctx.ws());
     db.listen(ws, { docId, readOnly }); // docId and readOnly is passed to 'connect' middleware as ctx.req
