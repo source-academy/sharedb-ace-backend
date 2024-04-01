@@ -9,7 +9,7 @@ const uuid = require('uuid').v4;
 const COLLECTION_NAME = 'sa';
 
 const app = new Koa();
-const db = new ShareDB();
+const db = new ShareDB({ presence: true });
 
 db.use('connect', (ctx, done) => {
   // use custom to store the allowed document ID and readOnly setting
