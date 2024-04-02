@@ -11,6 +11,17 @@ const COLLECTION_NAME = 'sa';
 const app = new Koa();
 const db = new ShareDB({ presence: true });
 
+// TODO: remove the following lines after done testing
+/*
+let wsCounter = 0;
+db.on('send', (agent, message) => {
+  if (message.a === 'p') { // if this is a presence
+    console.log(agent.clientId);
+    console.log(message);
+  }
+}); // agent represents connection to the client
+*/
+
 db.use('connect', (ctx, done) => {
   // use custom to store the allowed document ID and readOnly setting
   ctx.agent.custom = ctx.req;
@@ -76,6 +87,22 @@ app.use(async (ctx) => {
 
   if (ctx.ws) {
     const ws = new WebSocketJSONStream(await ctx.ws());
+    // TODO: remove the following lines after done testing
+    /*
+    const wsId = wsCounter++;
+    const ws = new WebSocketJSONStream(await ctx.ws().then((res) => {
+      console.log('websocket ' + wsId + ' open at ' + Date.now());
+      return res;
+    }));
+    ws.on('close', () => {
+      console.log('websocket ' + wsId + ' closed at ' + Date.now());
+    });
+    */
+   ws.on('error', (err) => {
+    if (err.name !== 'Error [ERR_HTTP_REQUEST_TIMEOUT]' && err.name !== 'Error [ERR_CLOSED]') {
+      console.log(err);
+    }
+   })
     db.listen(ws, { docId, readOnly }); // docId and readOnly is passed to 'connect' middleware as ctx.req
   } else {
     ctx.body = { docId, readOnly };
