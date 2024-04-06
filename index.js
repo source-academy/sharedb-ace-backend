@@ -98,11 +98,17 @@ app.use(async (ctx) => {
       console.log('websocket ' + wsId + ' closed at ' + Date.now());
     });
     */
-   ws.on('error', (err) => {
-    if (err.name !== 'Error [ERR_HTTP_REQUEST_TIMEOUT]' && err.name !== 'Error [ERR_CLOSED]') {
-      console.log(err);
-    }
-   })
+    ws.on('error', (err) => {
+      switch (err.message) {
+        case 'WebSocket CLOSING or CLOSED.':
+          console.log(err);
+          break;
+        default:
+          console.error('Unexpected error:')
+          console.error(err);
+          break;
+      }
+    })
     db.listen(ws, { docId, readOnly }); // docId and readOnly is passed to 'connect' middleware as ctx.req
   } else {
     ctx.body = { docId, readOnly };
