@@ -9,7 +9,7 @@ const uuid = require('uuid').v4;
 const COLLECTION_NAME = 'sa';
 
 const app = new Koa();
-const db = new ShareDB();
+const db = new ShareDB({ presence: true });
 
 db.use('connect', (ctx, done) => {
   // use custom to store the allowed document ID and readOnly setting
@@ -76,6 +76,17 @@ app.use(async (ctx) => {
 
   if (ctx.ws) {
     const ws = new WebSocketJSONStream(await ctx.ws());
+    ws.on('error', (err) => {
+      switch (err.message) {
+        case 'WebSocket CLOSING or CLOSED.':
+          console.log(err);
+          break;
+        default:
+          console.error('Unexpected error:')
+          console.error(err);
+          break;
+      }
+    })
     db.listen(ws, { docId, readOnly }); // docId and readOnly is passed to 'connect' middleware as ctx.req
   } else {
     ctx.body = { docId, readOnly };
