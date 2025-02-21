@@ -82,18 +82,21 @@ app.use(async (ctx) => {
           console.log(err);
           break;
         default:
-          console.error('Unexpected error:')
+          console.error('Unexpected error:');
           console.error(err);
           break;
       }
-    })
+    });
     db.listen(ws, { docId, readOnly }); // docId and readOnly is passed to 'connect' middleware as ctx.req
   } else {
     ctx.body = { docId, readOnly };
   }
 });
 
-app.listen(process.env.PORT || 8080);
+const server = app.listen(process.env.PORT || 8080);
+// Reference: https://github.com/b3nsn0w/koa-easy-ws/issues/36
+server.requestTimeout = 0;
+server.headersTimeout = 0;
 
 function getSessionDetails(sessionId) {
   const sessionDetails = documents.get(sessionId);
