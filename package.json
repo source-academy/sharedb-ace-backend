@@ -15,10 +15,10 @@
     "@koa/cors": "^5.0.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "koa": "^2.15.4",
-    "koa-bodyparser": "^4.3.0",
-    "koa-easy-ws": "^1.2.0",
+    "koa-bodyparser": "^4.4.1",
+    "koa-easy-ws": "^2.1.0",
     "sharedb": "^5.1.1",
-    "uuid": "^8.3.0"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "eslint": "^7.6.0",
