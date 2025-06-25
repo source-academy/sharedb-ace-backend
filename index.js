@@ -41,10 +41,8 @@ app.use(async (ctx) => {
 
     // Creates various IDs
     const docId = uuid();
-    const sessionEditingId = generateShortId();
-    documents.set(sessionEditingId, [docId, false]);
-    const sessionViewingId = generateShortId();
-    documents.set(sessionViewingId, [docId, true]);
+    const sessionId = generateShortId();
+    documents.set(sessionId, [docId, false]);
 
     const connection = db.connect(undefined, { docId, readOnly: false });
     const doc = connection.get(COLLECTION_NAME, docId);
@@ -57,15 +55,23 @@ app.use(async (ctx) => {
         }
       });
     });
-    ctx.body = { docId, sessionEditingId, sessionViewingId };
+    ctx.body = { docId, sessionId };
     return;
   }
 
   const sessionId = ctx.path.substr(1);
-  const [docId, readOnly] = getSessionDetails(sessionId);
+  const [docId, defaultReadOnly] = getSessionDetails(sessionId);
 
   if (docId === null) {
     ctx.status = 404;
+    return;
+  }
+
+  if (ctx.method === 'PATCH') {
+    const { defaultReadOnly } = ctx.request.body;
+
+    documents.set(sessionId, [docId, defaultReadOnly]);
+    ctx.status = 200;
     return;
   }
 
@@ -87,9 +93,9 @@ app.use(async (ctx) => {
           break;
       }
     });
-    db.listen(ws, { docId, readOnly }); // docId and readOnly is passed to 'connect' middleware as ctx.req
+    db.listen(ws, { docId, defaultReadOnly }); // docId and defaultReadOnly is passed to 'connect' middleware as ctx.req
   } else {
-    ctx.body = { docId, readOnly };
+    ctx.body = { docId, defaultReadOnly };
   }
 });
 
