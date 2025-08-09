@@ -2,6 +2,7 @@
   "name": "sharedb-ace-backend",
   "version": "0.0.1",
   "description": "ShareDB-powered backend for collaborative editing in the Source Academy.",
+  "type": "module",
   "main": "index.js",
   "repository": "https://github.com/source-academy/sharedb-ace-backend",
   "license": "Apache-2.0",
