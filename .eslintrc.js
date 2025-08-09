@@ -1,4 +1,6 @@
-module.exports = {
+// @ts-check
+/** @type{import('eslint').Linter.LegacyConfig} */
+export default {
   root: true,
   extends: ['eslint:recommended'],
   rules: {
