@@ -1,10 +1,11 @@
-const Koa = require('koa');
-const bodyParser = require('koa-bodyparser');
-const cors = require('@koa/cors');
-const websocket = require('koa-easy-ws');
-const WebSocketJSONStream = require('@teamwork/websocket-json-stream');
-const ShareDB = require('sharedb');
-const uuid = require('uuid').v4;
+// @ts-check
+import cors from '@koa/cors';
+import WebSocketJSONStream from '@teamwork/websocket-json-stream';
+import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
+import websocket from 'koa-easy-ws';
+import ShareDB from 'sharedb';
+import { v4 as uuid } from 'uuid';
 
 const COLLECTION_NAME = 'sa';
 

@@ -2,19 +2,22 @@
   "name": "sharedb-ace-backend",
   "version": "0.0.1",
   "description": "ShareDB-powered backend for collaborative editing in the Source Academy.",
+  "type": "module",
   "main": "index.js",
   "repository": "https://github.com/source-academy/sharedb-ace-backend",
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
     "eslint": "eslint index.js",
-    "format": "eslint --fix index.js && prettier index.js",
+    "format": "eslint --fix index.js && prettier --write index.js",
+    "lint": "eslint --report-unused-disable-directives --max-warnings 0 index.js && prettier --check index.js",
     "start": "node index.js"
   },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610",
   "dependencies": {
     "@koa/cors": "^5.0.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
-    "koa": "^2.16.1",
+    "koa": "^3.0.1",
     "koa-bodyparser": "^4.4.1",
     "koa-easy-ws": "^2.1.0",
     "sharedb": "^5.1.1",
@@ -22,7 +25,7 @@
     "ws": "^8.18.0"
   },
   "devDependencies": {
-    "eslint": "^7.6.0",
-    "prettier": "2.1.2"
+    "eslint": "^8.57.1",
+    "prettier": "^3.6.2"
   }
 }
