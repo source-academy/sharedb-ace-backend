@@ -11,6 +11,7 @@
     "format": "eslint --fix index.js && prettier index.js",
     "start": "node index.js"
   },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610",
   "dependencies": {
     "@koa/cors": "^5.0.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
