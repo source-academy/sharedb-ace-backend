@@ -21,7 +21,7 @@
     "koa-bodyparser": "^4.4.1",
     "koa-easy-ws": "^2.1.0",
     "sharedb": "^5.1.1",
-    "uuid": "^11.1.0",
+    "uuid": "^14.0.0",
     "ws": "^8.18.0"
   },
   "devDependencies": {
